@@ -1,0 +1,5 @@
+1) Открыть папку с программой
+2) Запустить cmd, введя в адресную строку "cmd"
+3.1) Для запуска глубинного поиска нужно ввести "WebParser_CPP.exe deep {filename for read (url)} {filename for write} {lvl} {proxy url (protocol://username:password@host:port)}" 
+3.2) Для запуска обычного парсера нужно ввести "WebParser_CPP.exe parser {filename for read (words)} {filename for write} {start page} {end page} {proxy url (protocol://username:password@host:port)}"
+4) Нажать "Enter"

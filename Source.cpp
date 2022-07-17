@@ -59,7 +59,7 @@ void findRefsOther(const string& page, vector<string>& refs, string url) {
 			start = i - 3;
 		}
 		else if (flag == 2 && (page[i] == '"' || page[i] == char(39) || page[i] == '&')) {
-			ref = page.substr(start, i - start);
+			ref = curl_easy_unescape(NULL, page.substr(start, i - start).c_str(), 0, NULL);
 			if (search(refs, ref))
 				refs.push_back(ref);
 			start = 0;
@@ -74,7 +74,7 @@ void findRefsOther(const string& page, vector<string>& refs, string url) {
 			start2 = i;
 		}
 		else if (flag2 == 2 && (page[i] == '"' || page[i] == char(39) || page[i] == '&')) {
-			ref = makeUrl(url, page.substr(start2, i - start2));
+			ref = curl_easy_unescape(NULL, makeUrl(url, page.substr(start2, i - start2)).c_str(), 0, NULL);
 			if (search(refs, ref) && !ref.empty())
 				refs.push_back(ref);
 			start2 = 0;
@@ -179,17 +179,31 @@ void deep(const string& url, vector<string>& refs, const int& lvl, const string&
 		return;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 	curl_global_init(CURL_GLOBAL_DEFAULT);
-	string proxy = "", url = "";
-	vector<string>refs;
-
-	/*ofstream file("refs.txt", ios_base::app);
-	deep(url, refs, 2, proxy, 0);
-	for (string i : refs) file << i << endl;
-	file.close();*/
-
-	parser("dict.txt", "refs.txt", 0, 20, proxy);
+	if (argc == 5) {
+		string file_r = *(argv + 1), file_w = *(argv + 2);
+		int lvl = stoi(*(argv + 3));
+		string proxy = *(argv + 4);
+		ifstream file1(file_r);
+		string tmp;
+		while (!file1.eof()) {
+			file1 >> tmp;
+			cout << tmp << "\n";
+			ofstream file2(file_w, ios_base::app);
+			vector<string>refs;
+			deep(tmp, refs, lvl, proxy, 0);
+			for (string i : refs) file2 << i << endl;
+			file2.close();
+		}
+		file1.close();
+	}
+	else if (argc == 6) {
+		string file_r = *(argv + 1), file_w = *(argv + 2);
+		int start = stoi(*(argv + 3)), end = stoi(*(argv + 4));
+		string proxy = *(argv + 5);
+		parser(file_r, file_w, start, end, proxy);
+	}
 	curl_global_cleanup();
 	return 0;
 }
