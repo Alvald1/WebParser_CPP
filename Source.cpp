@@ -138,7 +138,7 @@ void parse_page(const string& url, const string& proxy, string& page) {
 	curl = NULL;
 }
 
-void parser(const string& file_r, const string& file_w, const short int& start, const short int& end, const string& proxy) {
+void parser(const string& file_r, const string& file_w, const short int& start, const short int& end, const int& lvl, const string& proxy) {
 	ifstream file1(file_r);
 	string word = "", url = "", page = "";
 	vector<string>refs_o, refs_g;
@@ -150,12 +150,8 @@ void parser(const string& file_r, const string& file_w, const short int& start, 
 			parse_page(url, proxy, page);
 			refs_g = findRefsGoogle(page);
 			for (const auto& ref : refs_g) {
-				page = "";
 				refs_o.clear();
-				parse_page(ref, proxy, page);
-				findRefsOther(page, refs_o, ref);
-				system("cls");
-				cout << page;
+				deep(ref, refs_o, lvl, proxy, 0);
 				ofstream file2(file_w, ios_base::app);
 				file2 << ref << '\n';
 				for (const auto& i : refs_o)
@@ -200,9 +196,9 @@ int main(int argc, char* argv[]) {
 	}
 	else if (argc == 6) {
 		string file_r = *(argv + 1), file_w = *(argv + 2);
-		int start = stoi(*(argv + 3)), end = stoi(*(argv + 4));
-		string proxy = *(argv + 5);
-		parser(file_r, file_w, start, end, proxy);
+		int start = stoi(*(argv + 3)), end = stoi(*(argv + 4)), int lvl = stoi(*(argv + 5));
+		string proxy = *(argv + 6);
+		parser(file_r, file_w, start, end, lvl, proxy);
 	}
 	curl_global_cleanup();
 	return 0;

@@ -4,8 +4,8 @@
 
 WebParser_CPP.exe read.txt write.txt 2 http://user:pass@111.111.111.111:5555
 
-3.2) Для запуска обычного парсера нужно ввести "WebParser_CPP.exe {filename for read (words)} {filename for write} {start page} {end page} {proxy url (protocol://username:password@host:port)}"
+3.2) Для запуска обычного парсера нужно ввести "WebParser_CPP.exe {filename for read (words)} {filename for write} {start page} {end page} {lvl} {proxy url (protocol://username:password@host:port)}"
 
-WebParser_CPP.exe read.txt write.txt 0 10 http://user:pass@111.111.111.111:5555
+WebParser_CPP.exe read.txt write.txt 0 10 1 http://user:pass@111.111.111.111:5555
 
 4) Нажать "Enter"
